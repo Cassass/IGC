@@ -174,22 +174,22 @@ void ei_app_run()
 
                 bool traiter_evenement = false;
                 while (traiter_evenement == false) {
-                       ei_linked_rect_t *cour1 = rects_a_changer;
-                                while (cour1 != NULL) {
-                                        fprintf(stderr, "next=%p rect.topleft.x=%x rect.topleft.y=%x rect.size.height=%x\n", cour1->next, 
-                                                cour1->rect.top_left.x, cour1->rect.top_left.y, cour1->rect.size.height);
+                       /* ei_linked_rect_t *cour1 = rects_a_changer; */
+                       /*          while (cour1 != NULL) { */
+                       /*                  fprintf(stderr, "next=%p rect.topleft.x=%x rect.topleft.y=%x rect.size.height=%x\n", cour1->next,  */
+                       /*                          cour1->rect.top_left.x, cour1->rect.top_left.y, cour1->rect.size.height); */
                                         
-                                        cour1 = cour1->next;
-                                }
+                       /*                  cour1 = cour1->next; */
+                       /*          } */
                         hw_event_wait_next(event);
-                        cour1 = rects_a_changer;
-                                while (cour1 != NULL) {
-                                        fprintf(stderr,"next1=%p rect.topleft.x=%x rect.topleft.y=%x rect.size.height=%x\n", cour1->next, 
-                                                cour1->rect.top_left.x, cour1->rect.top_left.y, cour1->rect.size.height);
-                                        cour1 = cour1->next;
-                                }
+                        /* cour1 = rects_a_changer; */
+                        /*         while (cour1 != NULL) { */
+                        /*                 fprintf(stderr,"next1=%p rect.topleft.x=%x rect.topleft.y=%x rect.size.height=%x\n", cour1->next,  */
+                        /*                         cour1->rect.top_left.x, cour1->rect.top_left.y, cour1->rect.size.height); */
+                        /*                 cour1 = cour1->next; */
+                        /*         } */
                         
-                        if ((mvt_souris == true) && (event->type == ei_ev_mouse_move) &&
+                         if ((mvt_souris == true) && (event->type == ei_ev_mouse_move) &&
                                 (widget_prec != ei_widget_pick(&event->param.mouse.where)) && (etait_sur_bouton)) {
                                 traiter_evenement = true;
                         } else if ( (mvt_souris == true) && (event->type == ei_ev_mouse_move) &&
@@ -200,7 +200,10 @@ void ei_app_run()
                                         hw_event_wait_next(event);
                                 }
                                 traiter_evenement = false;
-                        } else if ((event->type != ei_ev_mouse_move) && (event->type != 2 && event->type != 3)) {
+                        /* } else if ((mvt_clavier) && ((event->type == ei_ev_keydown) ||(event->type == ei_ev_keyup)) ){ */
+			/* 	traiter_evenement = true; */
+			       
+			} else if ((event->type != ei_ev_mouse_move) && (event->type != 2 && event->type != 3)) {
                                 
                                 traiter_evenement = true;
                                
@@ -236,7 +239,13 @@ void ei_app_run()
                                 } else if (event->type == ei_ev_mouse_move && mvt_souris) {
                                         printf("evenement souris qui bouge\n");
                                         widget = widget_prec;
-                                } 
+                                } else if (event->type == ei_ev_keydown) {
+					printf("touche enfoncée");
+					key=&event->param.key;
+				} else if (event->type == ei_ev_keydown) {
+					printf("touche relevée");
+					
+				}
                                 // A GERER: si l'évenement est au clavier:
                                 // ............
 
@@ -244,7 +253,6 @@ void ei_app_run()
                                 bool traitant_pas_appele = true;
                                 
                                 while (traitant_pas_appele && cour != NULL) {
-
                                         if ((cour->tag == NULL && widget == cour->widget) || (cour->widget == NULL
                                                 && (strncmp((char*) cour->tag, ei_widgetclass_stringname(widget->wclass->name), 8) == 0))) {
                                                 // on appelle le traitant:
@@ -300,7 +308,7 @@ void ei_app_invalidate_rect(ei_rect_t* rect)
 {
         ei_linked_rect_t *cour = rects_a_changer;
         while (cour != NULL) {
-                printf( "%p\n", cour->next);
+                /* printf( "%p\n", cour->next); */
                 cour = cour->next;
         }
         ei_linked_rect_t *nouveau_rect = calloc(1, sizeof (ei_linked_rect_t));

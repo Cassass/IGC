@@ -9,6 +9,7 @@
 
 bool mvt_souris, mvt_clavier,etait_sur_bouton,sort_de_relacher_click;
 ei_widget_t *widget_prec;
+ei_key_event_t *key;
 
 struct ei_surface_t *surface_offscreen;
 

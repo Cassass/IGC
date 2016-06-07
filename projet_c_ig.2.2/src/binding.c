@@ -208,3 +208,35 @@ ei_bool_t relacher_click (ei_widget_t *widget, struct ei_event_t *event, void *u
         ei_unbind (ei_ev_mouse_move, widget, NULL, deplacement_souris_bouton_appuye_entrant_bouton, NULL);
         return EI_TRUE;
 }
+
+
+////////////////////////GESTION CLAVIER //////////////////
+
+
+ei_bool_t touche_enfoncee (ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+{
+        
+        
+	if (key->sym == "escape" ) {
+		ei_bind (ei_ev_keyup, NULL, "top_level", tout_fermer , NULL);
+		return EI_FALSE ;
+	} else if (est_modifier(key->sym)){ // il faut probablement utiliser ei_has_modifier (ei_event.h)
+		ei_bind (ei_ev_keydown,NULL,"top_level", touche_enfoncee_apres_modifier,NULL);
+		key->modifier_mask=key->sym;
+		ei_bind (ei_ev_keyup,NULL, "top_level", stop_modifier, NULL);
+		return EI_FALSE
+	} else {
+		ei_bind (ei_ev_key_up,NULL, "top_level", touche_relevee, NULL);
+		return EI_TRUE ; 
+	}       
+}
+
+ei_bool_t touche_relevee (ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+{
+	ei_unbind (ei_ev_key_up,NULL, "top_level", touche_relevee, NULL);
+	return EI_TRUE;
+}
+
+ei_bool_t tout_fermer (ei_widget_t *widget,struct ei_event_t *event, void *user_param)
+{
+}
