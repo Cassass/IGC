@@ -1,5 +1,5 @@
 #include "ei_geometrymanager.h"
-#include "ei_placer.h" 
+#include "ei_placer.h"
 #include "ei_types.h"
 #include "ei_widget_toplevel.h"
 #include <stdlib.h>
@@ -23,7 +23,7 @@ void ei_geometrymanager_register(ei_geometrymanager_t* geometrymanager)
 
 ei_geometrymanager_t* ei_geometrymanager_from_name(ei_geometrymanager_name_t name)
 {
-        if (strncmp((char*) name, "placeur", 7) == 0) {		
+        if (strncmp((char*) name, "placeur", 7) == 0) {
                 return manager_placeur;
         } else {
                 return NULL; // a continuer si on veut d'autre "manager"
@@ -31,7 +31,7 @@ ei_geometrymanager_t* ei_geometrymanager_from_name(ei_geometrymanager_name_t nam
 }
 
 void ei_geometrymanager_unmap(ei_widget_t* widget)
-{ 
+{
 	widget->geom_params = NULL;
 }
 
@@ -65,8 +65,8 @@ void ei_register_placer_manager()
   CAS PARTICULIERS :
   -si le pointeur est nul:
   prends en compte le fait que le widget n'ai pas de requested_size,
-  dans ce cas, la dimension du widget sera celle du parent 
-  (en donnant 1.0 comme valeur relative vis a vis de son parnet)  
+  dans ce cas, la dimension du widget sera celle du parent
+  (en donnant 1.0 comme valeur relative vis a vis de son parnet)
 */
 static float get_relative(float *relative,
 			  ei_widget_t *widget,
@@ -105,17 +105,17 @@ static float get_relative(float *relative,
   -un int contenant la dimension absolue
   par defaut si le pointeur n'est pas nul, renvoie la valeur qu'il pointe
 
-  CAS PARTICULIERS : 
+  CAS PARTICULIERS :
   -si le pointeur est nul:
   prends en compte le fait que le widget n'ai pas de requested_size,
-  dans ce cas, puisque get_relative donne au widget la taille de son parent, 
+  dans ce cas, puisque get_relative donne au widget la taille de son parent,
   il n'est pas nécéssaire de donner de dimension absolue
 
   -sinon: On veut que le widget soit au moins de la taille de sa requested_size .
-  On différencie le cas ou la taille relative suffit 
-  (dans ce cas , on retourne 0) 
+  On différencie le cas ou la taille relative suffit
+  (dans ce cas , on retourne 0)
   et celui ou elle ne suffit pas
-  (on retourne alors le minimum pour que la taille du widget soit de 
+  (on retourne alors le minimum pour que la taille du widget soit de
   sa requised-size)
 */
 static int get_absolute(int *absolute, ei_widget_t *widget, char dimension[10],
@@ -157,7 +157,7 @@ static float get_float(float *flottant)
 	} else {
 		return 0.0;
 	}
-} 
+}
 /*
   get_int:
   renvoie la valeur pointée pas entier si celui_ci n'est pas nul,
@@ -170,7 +170,7 @@ static int get_int(int *entier)
 	} else {
 		return 0;
 	}
-} 
+}
 
 /*
   corner_coordinates_updates:
@@ -178,7 +178,7 @@ static int get_int(int *entier)
   les constantes leur correspondant
   Utilisé pour le distinction de cas en fonction du switch sur l'anchor.
 */
-static void corner_coordinates_updates(int *absolue_x, 
+static void corner_coordinates_updates(int *absolue_x,
 				       int absolute_x_constant,
 				       float *relative_x,
 				       float relative_x_constant,
@@ -188,7 +188,7 @@ static void corner_coordinates_updates(int *absolue_x,
 				       float relative_y_constant)
 {
 	*absolue_x -= absolute_x_constant;
-	*relative_x -= relative_x_constant; 
+	*relative_x -= relative_x_constant;
 	*absolue_y -= absolute_y_constant;
 	*relative_y -= relative_y_constant;
 }
@@ -203,7 +203,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 	      float* rel_x, float* rel_y, float* rel_width,
 	      float* rel_height)
 {
-        
+
 	/* on commence par libérer le widget du geometrymanager qui s'occupait de */
 	/*    lui jusqu'a présent si il exise, et quil nest pas placer  */
 	/*    en appelant son champ relesefunc: */
@@ -211,13 +211,13 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 		(widget->geom_params->manager != NULL) &&
 		(widget->geom_params->manager->releasefunc != NULL) &&
 		(strncmp((char*) widget->geom_params->manager->name,"placeur",7)!= 0)) {
-                
+
 		widget->geom_params->manager->releasefunc(widget);
 	}
 
 
 	/*creation du placeur correspondant au widget*/
-	struct ei_placer_t *placer = calloc(1,sizeof(struct ei_placer_t));	
+	struct ei_placer_t *placer = calloc(1,sizeof(struct ei_placer_t));
 	if (placer == NULL) {
 		exit(EXIT_FAILURE);
 	}
@@ -232,7 +232,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 	char char_height[10];
 	strcpy(char_width, "width");
 	strcpy(char_height,"height");
-	
+
 	/*traitements des largeurs et longueurs */
 
 	/*relatives : */
@@ -246,9 +246,9 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 
 	/* longeurs et largeurs absolues: */
 
-	int absolute_width  =get_absolute(width,widget,char_width,relative_width); 
+	int absolute_width  =get_absolute(width,widget,char_width,relative_width);
 	int absolute_height =get_absolute(height,widget,char_height,relative_height);
-	
+
 
 	placer->absolute_size.width = absolute_width;
 	placer->absolute_size.height = absolute_height;
@@ -264,8 +264,8 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 	int absolute_x = get_int (x);
 	int absolute_y = get_int (y);
 
-	/*il reste a determiner a patir: 
-	  des coordonnées et tailles relatives et absolues 
+	/*il reste a determiner a patir:
+	  des coordonnées et tailles relatives et absolues
 	  celles correspondantes au coin en haut a gauche du widget.
 	  en tfaisant un switch sur l'anchor qui détermine quel
 	  coin est désigné par ces coordonnées*/
@@ -275,14 +275,14 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 	int *y_absolute_corner = &absolute_y;
 
 
-	/*si lancrage est null, 
-	  les coordonnées sont deja bien initialisées 
+	/*si lancrage est null,
+	  les coordonnées sont deja bien initialisées
 	  (par défaut il est deja sur le coin superieur gauche du widget);*/
 
 	if (anchor != NULL) {
 		switch (*anchor) {
-			/*par défaut, si anchor=0, 
-			  l'ancrage est sur le coin NORD-OUEST. 
+			/*par défaut, si anchor=0,
+			  l'ancrage est sur le coin NORD-OUEST.
 			  Donc les voordonnées sont deja initialisées*/
 		case 0:
 		case 9:
@@ -297,7 +297,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 						   y_relative_corner,
 						   relative_height / 2 );
 			break;
-		case 2:			
+		case 2:
 			corner_coordinates_updates(x_absolute_corner,
 						   floor(absolute_width / 2),
 						   x_relative_corner,
@@ -307,7 +307,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 						   y_relative_corner,
 						   0.0 );
 			break;
-		case 3:			
+		case 3:
 			corner_coordinates_updates(x_absolute_corner,
 						   absolute_width,
 						   x_relative_corner,
@@ -315,9 +315,9 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 						   y_absolute_corner,
 						   0,
 						   y_relative_corner,
-						   0.0 );			
+						   0.0 );
 			break;
-		case 4:			
+		case 4:
 			corner_coordinates_updates(x_absolute_corner,
 						   absolute_width,
 						   x_relative_corner,
@@ -327,7 +327,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 						   y_relative_corner,
 						   relative_height / 2 );
 			break;
-		case 5:			
+		case 5:
 			corner_coordinates_updates(x_absolute_corner,
 						   absolute_width,
 						   x_relative_corner,
@@ -337,7 +337,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 						   y_relative_corner,
 						   relative_height);
 			break;
-		case 6:			
+		case 6:
 			corner_coordinates_updates(x_absolute_corner,
 						   floor(absolute_width / 2),
 						   x_relative_corner,
@@ -357,7 +357,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 						   y_relative_corner,
 						   relative_height);
 			break;
-		case 8:			
+		case 8:
 			corner_coordinates_updates(x_absolute_corner,
 						   0,
 						   x_relative_corner,
@@ -379,7 +379,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 	placer->relative_top_left_corner.y = *y_relative_corner;
 	placer->absolute_top_left_corner.x = *x_absolute_corner;
 	placer->absolute_top_left_corner.y = *y_absolute_corner;
-        
+
 
 	/*on met finalement le placer dans le champs geometry_param_t du widget*/
 	widget->geom_params = (struct ei_geometry_param_t *) placer;
@@ -393,8 +393,9 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 		ei_widget_t* top_frame = ei_widget_create("frame", widget);
 		// parametres de configuration
 		int zero = 0;
+
 		ei_frame_configure(top_frame,
-				   NULL, &(toplevel->color), &zero, NULL, 
+				   NULL, &(toplevel->color), &zero, NULL,
 				   &(toplevel->title), NULL, NULL, NULL,
 				   NULL, NULL, NULL);
 		// parametres de dessin
@@ -402,11 +403,11 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 		int text_h = 0;
 		int text_w = 0;
 		hw_text_compute_size(toplevel->title, ei_default_font, &text_h, &text_w);
-		text_h /=2;
-		ei_place(top_frame, &northwest, 
-			 &zero, &zero, 
-			 &(toplevel->wtoplevel.requested_size.width), &text_h, 
-			 NULL, NULL, 
+		text_h /=4;
+		ei_place(top_frame, &northwest,
+			 &zero, &zero,
+			 &(toplevel->wtoplevel.requested_size.width), &text_h,
+			 NULL, NULL,
 			 NULL, NULL);
 		if (toplevel->closable == EI_TRUE){
 			ei_widget_t* closing_button = ei_widget_create("button", widget);
@@ -434,9 +435,9 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 			ei_widget_t* resizing_button = ei_widget_create("button", widget);
 			// parametres de configuration
 			ei_size_t req_size = {15,15};
-			ei_button_configure(resizing_button, 
-					    &req_size, &(toplevel->color), NULL, &zero, &zero, 
-					   NULL, NULL, NULL, NULL, 
+			ei_button_configure(resizing_button,
+					    &req_size, &(toplevel->color), NULL, &zero, &zero,
+					   NULL, NULL, NULL, NULL,
 					    NULL, NULL, NULL, NULL, NULL);
 			// parametres de placement
 			ei_anchor_t southeast = ei_anc_southeast;
@@ -453,7 +454,7 @@ void ei_place(ei_widget_t* widget, ei_anchor_t* anchor,
 }
 
 
-/*puis on appelle, finalement run_func de placer qui va mettre a 
+/*puis on appelle, finalement run_func de placer qui va mettre a
   jour les coordonnées du widget, grace aux dépendances mémorisées
   dans le placer*/
 

@@ -4,15 +4,14 @@
 
 
 void* alloc_frame() {
+	int text_max_length = 20;
 	ei_frame_t* frame = calloc(1, sizeof (struct ei_frame_t));
-//	frame->text = calloc(1, sizeof(char));
+	frame->text = calloc(text_max_length, sizeof(char));
 	frame->img_rect = calloc(1, sizeof(ei_rect_t));
 	return frame;
-//	return calloc(1, sizeof (struct ei_frame_t));
 }
 
 void release_frame(ei_widget_t* widget) {
-//        printf("debut release_frame\n");
 	//verifie si le widget appele appartient a la bonne classe
 	if(widget->wclass != frame_class){
 		printf("appel fct frame avec autre classe de widget\n");
@@ -20,16 +19,10 @@ void release_frame(ei_widget_t* widget) {
 	}
 	ei_frame_t* frame = (ei_frame_t*) widget;
 	//desallocation des champs propres a la classe frame
-//	free(frame->text);
-//        printf("avant frame->img_rect\n");
-	/* if (frame->img_rect == NULL) { */
-        /*         printf("cest null\n"); */
-        /* } */
+	free(frame->text);
         free(frame->img_rect);
 	//desallocation de la frame
-//        printf("aprés frame->img_rect et avant frame\n");
         free(frame);
-//        printf("fin release_frame\n");
 }
 
 // procedure d'insertion en queue classique
@@ -66,7 +59,7 @@ void free_list(ei_linked_point_t** list)
 }
 
 // retourne une couleur avec transparence vis a vis de la surface actuelle
-ei_color_t ei_alpha_handling(ei_surface_t surface, ei_color_t top_color, 
+ei_color_t ei_alpha_handling(ei_surface_t surface, ei_color_t top_color,
 			     ei_point_t pixel_coords, int offset)
 {
 	// recup des indices des couleurs
@@ -92,9 +85,9 @@ ei_color_t ei_alpha_handling(ei_surface_t surface, ei_color_t top_color,
 }
 
 // dessine une surface simple, sans gestion de relief
-void ei_draw_simple(ei_surface_t surface, 
-		    ei_frame_t* frame, 
-		    ei_rect_t* clipper, 
+void ei_draw_simple(ei_surface_t surface,
+		    ei_frame_t* frame,
+		    ei_rect_t* clipper,
 		    ei_bool_t est_clip)
 {
         ei_linked_point_t** to_draw = malloc(sizeof(struct ei_linked_point_t*));
@@ -103,14 +96,14 @@ void ei_draw_simple(ei_surface_t surface,
 	ei_color_t drawing_color = frame->color;
 	if (hw_surface_has_alpha(surface) == EI_TRUE){
 		// "premier" point a la couleur sous le widget a dessiner
-		ei_point_t sample_point = 
-			{frame->wframe.screen_location.top_left.x+ frame->border_width, 
+		ei_point_t sample_point =
+			{frame->wframe.screen_location.top_left.x+ frame->border_width,
 			frame->wframe.screen_location.top_left.y+frame->border_width};
-		drawing_color = ei_alpha_handling(surface, drawing_color, sample_point, 
+		drawing_color = ei_alpha_handling(surface, drawing_color, sample_point,
 						  frame->wframe.screen_location.size.width);
 	}
         // top left corner
-        insert_q_int(to_draw, 
+        insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x+frame->border_width,
 		     frame->wframe.screen_location.top_left.y+frame->border_width);
         // top right corner
@@ -120,20 +113,20 @@ void ei_draw_simple(ei_surface_t surface,
 		     frame->border_width,
 		     frame->wframe.screen_location.top_left.y+frame->border_width);
         //bottom right corner
-        insert_q_int(to_draw, 
+        insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x+
 		     frame->wframe.screen_location.size.width-
-		     frame->border_width, 
+		     frame->border_width,
 		     frame->wframe.screen_location.top_left.y+
 		     frame->wframe.screen_location.size.height-frame->border_width);
         // bottom left corner
         insert_q_int(to_draw,
-		     frame->wframe.screen_location.top_left.x+frame->border_width, 
+		     frame->wframe.screen_location.top_left.x+frame->border_width,
 		     frame->wframe.screen_location.top_left.y+
 		     frame->wframe.screen_location.size.height-frame->border_width);
 	//dessin avec primitives fournies
 	if(est_clip == EI_FALSE){
-		ei_draw_polygon(surface, *to_draw, drawing_color, clipper);	      
+		ei_draw_polygon(surface, *to_draw, drawing_color, clipper);
 	}else{
 		ei_draw_polygon(surface, *to_draw, *(frame->wframe.pick_color), clipper);
 	}
@@ -141,9 +134,9 @@ void ei_draw_simple(ei_surface_t surface,
 }
 
 //dessin de la partie superieure de la frame
-void ei_draw_upper(ei_surface_t surface, 
-		   ei_frame_t* frame, 
-		   ei_rect_t* clipper, 
+void ei_draw_upper(ei_surface_t surface,
+		   ei_frame_t* frame,
+		   ei_rect_t* clipper,
 		   ei_bool_t lighter)
 {
 	ei_linked_point_t** to_draw = malloc(sizeof(ei_linked_point_t*));
@@ -152,13 +145,13 @@ void ei_draw_upper(ei_surface_t surface,
 	upper_color.red = 0x00;
 	upper_color.green = 0x00;
 	upper_color.blue = 0x00;
-
+	upper_color.alpha = 0xFF;
 	//calcul sur la couleur pour la gestion du relief
 	if (lighter == EI_TRUE){
 		upper_color.red = frame->color.red*0.3 + 255*0.7;
 		upper_color.green = frame->color.green*0.3 + 255*0.7;
 		upper_color.blue = frame->color.blue*0.3 + 255*0.7;
-	}else{	
+	}else{
 		upper_color.red = frame->color.red*0.7;
 		upper_color.green = frame->color.green*0.7;
 		upper_color.blue = frame->color.blue*0.7;
@@ -167,32 +160,32 @@ void ei_draw_upper(ei_surface_t surface,
 	ei_color_t drawing_color = upper_color;
 	if (hw_surface_has_alpha(surface) == EI_TRUE){
 		// "premier" point a la couleur sous le widget a dessiner
-		ei_point_t sample_point = 
-			{frame->wframe.screen_location.top_left.x, 
+		ei_point_t sample_point =
+			{frame->wframe.screen_location.top_left.x,
 			 frame->wframe.screen_location.top_left.y};
-		drawing_color = ei_alpha_handling(surface, drawing_color, sample_point, 
+		drawing_color = ei_alpha_handling(surface, drawing_color, sample_point,
 						  frame->wframe.screen_location.size.width);
-	}	
+	}
 	//bottom left corner
-	insert_q_int(to_draw, 
+	insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x,
 		     frame->wframe.screen_location.top_left.y+
 		     frame->wframe.screen_location.size.height);
 	//diag, 1e partie
-	insert_q_int(to_draw, 
+	insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x+
 		     frame->wframe.screen_location.size.height/2,
 		     frame->wframe.screen_location.top_left.y+
 		     frame->wframe.screen_location.size.height/2);
 	//line
-	insert_q_int(to_draw, 
+	insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x+
 		     frame->wframe.screen_location.size.width-
 		     frame->wframe.screen_location.size.height/2,
 		     frame->wframe.screen_location.top_left.y+
 		     frame->wframe.screen_location.size.height/2);
 	//top right corner
-	insert_q_int(to_draw, 
+	insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x+
 		     frame->wframe.screen_location.size.width,
 		     frame->wframe.screen_location.top_left.y);
@@ -207,9 +200,9 @@ void ei_draw_upper(ei_surface_t surface,
 }
 
 //dessin de la partie inferieure de la frame
-void ei_draw_lower(ei_surface_t surface, 
-		   ei_frame_t* frame, 
-		   ei_rect_t* clipper, 
+void ei_draw_lower(ei_surface_t surface,
+		   ei_frame_t* frame,
+		   ei_rect_t* clipper,
 		   ei_bool_t lighter)
 {
 	ei_linked_point_t** to_draw = malloc(sizeof(ei_linked_point_t*));
@@ -225,43 +218,43 @@ void ei_draw_lower(ei_surface_t surface,
 		lower_color.red = frame->color.red*0.3 + 255*0.7;
 		lower_color.green = frame->color.green*0.3 + 255*0.7;
 		lower_color.blue = frame->color.blue*0.3 + 255*0.7;
-	}else{	
+	}else{
 		lower_color.red = frame->color.red*0.7;
 		lower_color.green = frame->color.green*0.7;
 		lower_color.blue = frame->color.blue*0.7;
 	}
-	
+
 	// gestion de la transparence
 	ei_color_t drawing_color = lower_color;
 	if (hw_surface_has_alpha(surface) == EI_TRUE){
 		// point a la couleur sous le widget a dessiner
-		ei_point_t sample_point = 
-			{frame->wframe.screen_location.top_left.x, 
+		ei_point_t sample_point =
+			{frame->wframe.screen_location.top_left.x,
 			 frame->wframe.screen_location.top_left.y+
 			 frame->wframe.screen_location.size.height};
-		drawing_color = ei_alpha_handling(surface, drawing_color, sample_point, 
+		drawing_color = ei_alpha_handling(surface, drawing_color, sample_point,
 						  frame->wframe.screen_location.size.width);
-	}	
+	}
 	//bottom left corner
-	insert_q_int(to_draw, 
+	insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x,
 		     frame->wframe.screen_location.top_left.y+
 		     frame->wframe.screen_location.size.height);
 	//diag, 1e partie
-	insert_q_int(to_draw, 
+	insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x+
 		     frame->wframe.screen_location.size.height/2,
 		     frame->wframe.screen_location.top_left.y+
 		     frame->wframe.screen_location.size.height/2);
 	//line
-	insert_q_int(to_draw, 
+	insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x+
 		     frame->wframe.screen_location.size.width-
 		     frame->wframe.screen_location.size.height/2,
 		     frame->wframe.screen_location.top_left.y+
 		     frame->wframe.screen_location.size.height/2);
 	//top right corner
-	insert_q_int(to_draw, 
+	insert_q_int(to_draw,
 		     frame->wframe.screen_location.top_left.x+
 		     frame->wframe.screen_location.size.width,
 		     frame->wframe.screen_location.top_left.y);
@@ -301,7 +294,7 @@ void text_draw_frame(ei_surface_t surface, ei_frame_t* frame,  ei_rect_t* clippe
 	    frame->text_anchor == ei_anc_east || frame->text_anchor == ei_anc_west){
 		where.y = frame->wframe.screen_location.top_left.y+
 			(frame->wframe.screen_location.size.height-text_h)/2;
-	}else if (frame->text_anchor == ei_anc_southeast || 
+	}else if (frame->text_anchor == ei_anc_southeast ||
 		  frame->text_anchor == ei_anc_southwest ||
 		  frame->text_anchor == ei_anc_south){
 		where.y = frame->wframe.screen_location.top_left.y+
@@ -309,12 +302,23 @@ void text_draw_frame(ei_surface_t surface, ei_frame_t* frame,  ei_rect_t* clippe
 	}else{
 		where.y = frame->wframe.screen_location.top_left.y; //en haut
 	}
-	ei_draw_text(surface, &where, 
+	ei_draw_text(surface, &where,
 		     frame->text, frame->text_font, &(frame->text_color), clipper);
-} 
+}
+void image_draw_frame(ei_surface_t dest, ei_frame_t* frame) //requiert frame != NULL
+{
+	//enfin copie sur la surface ppale
+	int token = 1;
+	token = ei_copy_surface(dest, &(frame->wframe.screen_location), frame->img, frame->img_rect, EI_FALSE);
+	// verification du succes de la creation de l'image. 0 == reussite
+	if (token == 1){
+		printf("echec creation image dans frame\n");
+		exit(EXIT_FAILURE);
+	}
+}
 
 //partie creation de la liste chainee pour creation des rectangles
-void ei_frame_draw(struct ei_widget_t *widget, ei_surface_t surface, ei_rect_t *clipper, ei_bool_t est_pick) 
+void ei_frame_draw(struct ei_widget_t *widget, ei_surface_t surface, ei_rect_t *clipper, ei_bool_t est_pick)
 {
 	if(widget->wclass != frame_class){
 		printf("appel fct frame avec autre classe de widget\n");
@@ -322,7 +326,7 @@ void ei_frame_draw(struct ei_widget_t *widget, ei_surface_t surface, ei_rect_t *
 	}
 
         ei_frame_t* frame = (ei_frame_t*) widget;
-        //gestion du cas où clipper est NULL: 
+        //gestion du cas où clipper est NULL:
         //on limite donc le dessin à la taille de l'écran
         ei_rect_t* clipper_draw = malloc(sizeof (ei_rect_t));
         if (clipper == NULL) {
@@ -350,7 +354,9 @@ void ei_frame_draw(struct ei_widget_t *widget, ei_surface_t surface, ei_rect_t *
         } else {
 		ei_draw_simple(surface, frame, clipper_draw, est_pick);
 	}
-	if(frame->text != NULL){
+	if(frame->img != NULL){
+		image_draw_frame(surface, frame);
+	}else if(frame->text != NULL){ // le dessin de l'image sera prioritaire
 		text_draw_frame(surface, frame, clipper_draw);
 	}
 	free(clipper_draw);
@@ -363,23 +369,20 @@ void draw_frame(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t p
 		printf("appel fct frame avec autre classe de widget\n");
 		exit(EXIT_FAILURE);
 	}
-//        printf("début draw_frame\n");
         //dessin de la frame sur la surface utilisateur
         hw_surface_lock(surface);
-        ei_frame_draw(widget, surface, clipper, EI_FALSE);        
+        ei_frame_draw(widget, surface, clipper, EI_FALSE);
 	hw_surface_unlock(surface);
 	hw_surface_update_rects(surface, NULL);
         //dessin de la frame sur la surface de picking1
         if (pick_surface != NULL) {
                 hw_surface_lock(pick_surface);
-//                printf("coucou\n");
                 ei_frame_draw(widget, pick_surface, clipper, EI_TRUE);
                 hw_surface_unlock(pick_surface);
-        }	
-//        printf("fin draw_frame\n");
+        }
 }
 
-// valeurs par défaut de la classe frame. 
+// valeurs par défaut de la classe frame.
 //Ne prend pas en compte les parametres de la classe widget
 void setdefaults_frame(struct ei_widget_t* widget) {
 	if(widget->wclass != frame_class){

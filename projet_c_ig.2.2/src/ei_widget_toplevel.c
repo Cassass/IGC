@@ -19,11 +19,11 @@ void* alloc_toplevel()
         }
 	int title_max_size = 20;
 	toplevel->title = calloc(title_max_size, sizeof(char));
-        
+
 	// on lie les évènements aux toplevel:
 	// uniquement pr le deplacement de la fenetre
         return toplevel;
-	
+
 }
 
 void release_toplevel(ei_widget_t* widget)
@@ -35,36 +35,36 @@ void release_toplevel(ei_widget_t* widget)
         ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
         free(toplevel->min_size);
         free(toplevel);
-	
-}
-
-//genere une liste de points chaines pour le background du toplevel
-void ei_top_gene(ei_linked_point_t** list, ei_toplevel_t* toplevel, int bar_size){
-	// top left corner
-        insert_q_int(list, 
-		     toplevel->wtoplevel.screen_location.top_left.x,
-		     toplevel->wtoplevel.screen_location.top_left.y);
-        // top right corner
-        insert_q_int(list,
-		     toplevel->wtoplevel.screen_location.top_left.x+
-		     toplevel->wtoplevel.screen_location.size.width,
-		     toplevel->wtoplevel.screen_location.top_left.y);
-        //bottom right corner
-        insert_q_int(list, 
-		     toplevel->wtoplevel.screen_location.top_left.x+
-		     toplevel->wtoplevel.screen_location.size.width, 
-		     toplevel->wtoplevel.screen_location.top_left.y + bar_size);
-        // bottom left corner
-        insert_q_int(list,
-		     toplevel->wtoplevel.screen_location.top_left.x, 
-		     toplevel->wtoplevel.screen_location.top_left.y + bar_size);
 
 }
 
-//genere une liste de points chaines pour le foreground du toplevel
+/* //genere une liste de points chaines pour le background du toplevel */
+/* void ei_bg_gene(ei_linked_point_t** list, ei_toplevel_t* toplevel, int bar_size){ */
+/* 	// top left corner */
+/*         insert_q_int(list, */
+/* 		     toplevel->wtoplevel.screen_location.top_left.x, */
+/* 		     toplevel->wtoplevel.screen_location.top_left.y); */
+/*         // top right corner */
+/*         insert_q_int(list, */
+/* 		     toplevel->wtoplevel.screen_location.top_left.x+ */
+/* 		     toplevel->wtoplevel.screen_location.size.width, */
+/* 		     toplevel->wtoplevel.screen_location.top_left.y); */
+/*         //bottom right corner */
+/*         insert_q_int(list, */
+/* 		     toplevel->wtoplevel.screen_location.top_left.x+ */
+/* 		     toplevel->wtoplevel.screen_location.size.width, */
+/* 		     toplevel->wtoplevel.screen_location.top_left.y + bar_size); */
+/*         // bottom left corner */
+/*         insert_q_int(list, */
+/* 		     toplevel->wtoplevel.screen_location.top_left.x, */
+/* 		     toplevel->wtoplevel.screen_location.top_left.y + bar_size); */
+
+/* } */
+
+//genere une liste de points chaines pour le corps du toplevel
 void ei_fg_gene(ei_linked_point_t** list, ei_toplevel_t* toplevel, int offset, int bar_size){
 	// top left corner
-        insert_q_int(list, 
+        insert_q_int(list,
 		     toplevel->wtoplevel.screen_location.top_left.x + offset,
 		     toplevel->wtoplevel.screen_location.top_left.y + bar_size);
         // top right corner
@@ -73,20 +73,22 @@ void ei_fg_gene(ei_linked_point_t** list, ei_toplevel_t* toplevel, int offset, i
 		     toplevel->wtoplevel.screen_location.size.width - offset,
 		     toplevel->wtoplevel.screen_location.top_left.y + bar_size);
         //bottom right corner
-        insert_q_int(list, 
+        insert_q_int(list,
 		     toplevel->wtoplevel.screen_location.top_left.x+
-		     toplevel->wtoplevel.screen_location.size.width - offset, 
+		     toplevel->wtoplevel.screen_location.size.width - offset,
 		     toplevel->wtoplevel.screen_location.top_left.y+
 		     toplevel->wtoplevel.screen_location.size.height-offset);
         // bottom left corner
         insert_q_int(list,
-		     toplevel->wtoplevel.screen_location.top_left.x + offset, 
+		     toplevel->wtoplevel.screen_location.top_left.x + offset,
 		     toplevel->wtoplevel.screen_location.top_left.y+
 		     toplevel->wtoplevel.screen_location.size.height - offset);
 
 }
 
-//fonction de dessin de la classe toplevel
+// fonction de dessin de la classe toplevel
+// le dessin des autres composantes dependent du dessin des enfants (cf. ei_place.c)
+// il n'y finalement que tres peu de dessin ici
 void draw_toplevel(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface,
 		   ei_rect_t *clipper)
 {
@@ -98,11 +100,11 @@ void draw_toplevel(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_
 	// recuperation de la hauteur du texte pour la taille de la barre
 	int title_size_height = 0;
 	int title_size_width = 0;
-	hw_text_compute_size(toplevel->title, 
-			     ei_default_font, &title_size_width, &title_size_height);	
+	hw_text_compute_size(toplevel->title,
+			     ei_default_font, &title_size_width, &title_size_height);
 	ei_linked_point_t** to_draw = malloc(sizeof(struct ei_linked_point_t*));
 	*to_draw = NULL;
-	
+
 	ei_rect_t* clipper_draw = malloc(sizeof(ei_rect_t));
 	if (clipper != NULL){
 		*clipper_draw = *clipper;
@@ -112,16 +114,35 @@ void draw_toplevel(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_
 	// dessin du corps exterieur de la toplevel
 	*to_draw = NULL;
 	ei_fg_gene(to_draw, toplevel, 0, title_size_height);
-	ei_draw_polygon(surface, *to_draw, toplevel->color, clipper_draw);
+	// gestion de la transparence
+	ei_color_t drawing_color = toplevel->color;
+	if (hw_surface_has_alpha(surface) == EI_TRUE){
+		// point a la couleur sous le widget a dessiner
+		ei_point_t sample_point ={(*to_draw)->point.x,(*to_draw)->point.y};
+		drawing_color = ei_alpha_handling(surface, drawing_color, sample_point,
+						  toplevel->wtoplevel.screen_location.size.width);
+	}
+	ei_draw_polygon(surface, *to_draw, drawing_color, clipper_draw);
+
 	// dessin du corps interieur de la toplevel
 	*to_draw = NULL;
 	ei_fg_gene(to_draw, toplevel, toplevel->border_width, title_size_height);
-	ei_color_t lighter = {toplevel->color.red*0.6 + 255*0.4, 
+	// couleur du corps, plus clair que l'encadrement
+	ei_color_t lighter = {toplevel->color.red*0.6 + 255*0.4,
 			      toplevel->color.green*0.6 + 255*0.4,
 			      toplevel->color.blue*0.6 + 255*0.4,
 			      toplevel->color.alpha};
-	ei_draw_polygon(surface, *to_draw, lighter, clipper_draw);
-	// le dessin des autres composantes dependent du dessin des enfants (cf. ei_place.c)
+
+	// gestion de la transparence
+	drawing_color = lighter;
+	if (hw_surface_has_alpha(surface) == EI_TRUE){
+		// point a la couleur sous le widget a dessiner
+		ei_point_t sample_point ={(*to_draw)->point.x, (*to_draw)->point.y};
+		drawing_color = ei_alpha_handling(surface, drawing_color, sample_point,
+						  toplevel->wtoplevel.screen_location.size.width);
+	}
+
+	ei_draw_polygon(surface, *to_draw, drawing_color, clipper_draw);
 }
 
 void setdefaults_toplevel(struct ei_widget_t* widget)
@@ -140,7 +161,7 @@ void geom_toplevel(struct ei_widget_t* widget, ei_rect_t rect)
 {
 	if (widget->wclass != toplevel_class){
 		printf("appel fct toplevel avec autre classe de widget\n");
-		exit(EXIT_FAILURE);	     
+		exit(EXIT_FAILURE);
 	}
 	// maj de la screen location a la taille de rect
 	widget->screen_location = rect;
