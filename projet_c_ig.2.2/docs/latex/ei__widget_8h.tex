@@ -1,0 +1,159 @@
+\hypertarget{ei__widget_8h}{
+\section{ei\_\-widget.h File Reference}
+\label{ei__widget_8h}\index{ei\_\-widget.h@{ei\_\-widget.h}}
+}
+
+
+API for widgets management: creation, configuration, hierarchy, redisplay.  
+{\ttfamily \#include \char`\"{}ei\_\-draw.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}ei\_\-widgetclass.h\char`\"{}}\par
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structei__widget__t}{ei\_\-widget\_\-t}
+\begin{DoxyCompactList}\small\item\em Fields common to all types of widget. Every widget classes specializes this base class by adding its own fields. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28}{ei\_\-bool\_\-t}($\ast$ \hyperlink{ei__widget_8h_a3692fee0affca071917f22f2ec2018a4}{ei\_\-callback\_\-t} )(\hyperlink{structei__widget__t}{ei\_\-widget\_\-t} $\ast$widget, struct \hyperlink{structei__event__t}{ei\_\-event\_\-t} $\ast$event, void $\ast$user\_\-param)
+\begin{DoxyCompactList}\small\item\em A function that is called in response to a user event. Usually passed as a parameter to \hyperlink{ei__event_8h_a184545ec337224781aa9bfc94117a910}{ei\_\-bind}. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structei__widget__t}{ei\_\-widget\_\-t} $\ast$ \hyperlink{ei__widget_8h_a06da409592af870c9ab9c36f85147ce8}{ei\_\-widget\_\-create} (\hyperlink{ei__widgetclass_8h_acfa18ebbfac8cbbc11345a01c2099aed}{ei\_\-widgetclass\_\-name\_\-t} class\_\-name, \hyperlink{structei__widget__t}{ei\_\-widget\_\-t} $\ast$parent)
+\begin{DoxyCompactList}\small\item\em Creates a new instance of a widget of some particular class, as a descendant of an existing widget. \item\end{DoxyCompactList}\item 
+void \hyperlink{ei__widget_8h_a57aa6b5c33e92eb9728dc478f15b7de6}{ei\_\-widget\_\-destroy} (\hyperlink{structei__widget__t}{ei\_\-widget\_\-t} $\ast$widget)
+\begin{DoxyCompactList}\small\item\em Destroys a widget. Removes it from screen if it is managed by a geometry manager. Destroys all its descendants. \item\end{DoxyCompactList}\item 
+\hyperlink{structei__widget__t}{ei\_\-widget\_\-t} $\ast$ \hyperlink{ei__widget_8h_a3a91c65052c667a7a5eefef1606c099d}{ei\_\-widget\_\-pick} (\hyperlink{structei__point__t}{ei\_\-point\_\-t} $\ast$where)
+\begin{DoxyCompactList}\small\item\em Returns the widget that is at a given location on screen. \item\end{DoxyCompactList}\item 
+void \hyperlink{ei__widget_8h_aaaeb8447f509b20478940b514b542106}{ei\_\-frame\_\-configure} (\hyperlink{structei__widget__t}{ei\_\-widget\_\-t} $\ast$widget, \hyperlink{structei__size__t}{ei\_\-size\_\-t} $\ast$requested\_\-size, const \hyperlink{structei__color__t}{ei\_\-color\_\-t} $\ast$color, int $\ast$border\_\-width, \hyperlink{ei__types_8h_aa79a32b1d8ece0e44cfa394e870b270b}{ei\_\-relief\_\-t} $\ast$relief, char $\ast$$\ast$text, \hyperlink{ei__types_8h_a22c8198e4d641e4bc67bb17f9c6bcda7}{ei\_\-font\_\-t} $\ast$text\_\-font, \hyperlink{structei__color__t}{ei\_\-color\_\-t} $\ast$text\_\-color, \hyperlink{ei__types_8h_a3852c963af609d31d7cfcff79c4c8450}{ei\_\-anchor\_\-t} $\ast$text\_\-anchor, \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\_\-surface\_\-t} $\ast$img, \hyperlink{structei__rect__t}{ei\_\-rect\_\-t} $\ast$$\ast$img\_\-rect, \hyperlink{ei__types_8h_a3852c963af609d31d7cfcff79c4c8450}{ei\_\-anchor\_\-t} $\ast$img\_\-anchor)
+\begin{DoxyCompactList}\small\item\em Configures the attributes of widgets of the class \char`\"{}frame\char`\"{}. \item\end{DoxyCompactList}\item 
+void \hyperlink{ei__widget_8h_a6aef3afd6aa8e6bab563735a0c54a76b}{ei\_\-button\_\-configure} (\hyperlink{structei__widget__t}{ei\_\-widget\_\-t} $\ast$widget, \hyperlink{structei__size__t}{ei\_\-size\_\-t} $\ast$requested\_\-size, const \hyperlink{structei__color__t}{ei\_\-color\_\-t} $\ast$color, int $\ast$border\_\-width, int $\ast$corner\_\-radius, \hyperlink{ei__types_8h_aa79a32b1d8ece0e44cfa394e870b270b}{ei\_\-relief\_\-t} $\ast$relief, char $\ast$$\ast$text, \hyperlink{ei__types_8h_a22c8198e4d641e4bc67bb17f9c6bcda7}{ei\_\-font\_\-t} $\ast$text\_\-font, \hyperlink{structei__color__t}{ei\_\-color\_\-t} $\ast$text\_\-color, \hyperlink{ei__types_8h_a3852c963af609d31d7cfcff79c4c8450}{ei\_\-anchor\_\-t} $\ast$text\_\-anchor, \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\_\-surface\_\-t} $\ast$img, \hyperlink{structei__rect__t}{ei\_\-rect\_\-t} $\ast$$\ast$img\_\-rect, \hyperlink{ei__types_8h_a3852c963af609d31d7cfcff79c4c8450}{ei\_\-anchor\_\-t} $\ast$img\_\-anchor, \hyperlink{ei__widget_8h_a3692fee0affca071917f22f2ec2018a4}{ei\_\-callback\_\-t} $\ast$callback, void $\ast$$\ast$user\_\-param)
+\begin{DoxyCompactList}\small\item\em Configures the attributes of widgets of the class \char`\"{}button\char`\"{}. \item\end{DoxyCompactList}\item 
+void \hyperlink{ei__widget_8h_a853349fd4f65ae575a1989a9713059b4}{ei\_\-toplevel\_\-configure} (\hyperlink{structei__widget__t}{ei\_\-widget\_\-t} $\ast$widget, \hyperlink{structei__size__t}{ei\_\-size\_\-t} $\ast$requested\_\-size, \hyperlink{structei__color__t}{ei\_\-color\_\-t} $\ast$color, int $\ast$border\_\-width, char $\ast$$\ast$title, \hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28}{ei\_\-bool\_\-t} $\ast$closable, \hyperlink{ei__types_8h_ab5d9ff46ba9b2c9fa6d6fbd2594c6439}{ei\_\-axis\_\-set\_\-t} $\ast$resizable, \hyperlink{structei__size__t}{ei\_\-size\_\-t} $\ast$$\ast$min\_\-size)
+\begin{DoxyCompactList}\small\item\em Configures the attributes of widgets of the class \char`\"{}toplevel\char`\"{}. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const int \hyperlink{ei__widget_8h_a9d4970e13991bc2e49f47892c7e9429f}{k\_\-default\_\-button\_\-border\_\-width} = 4
+\begin{DoxyCompactList}\small\item\em The default border width of button widgets. \item\end{DoxyCompactList}\item 
+static const int \hyperlink{ei__widget_8h_aa204a20fcee599bf19f02f7813dac04d}{k\_\-default\_\-button\_\-corner\_\-radius} = 10
+\begin{DoxyCompactList}\small\item\em The default corner radius of button widgets. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+API for widgets management: creation, configuration, hierarchy, redisplay. Created by François Bérard on 30.12.11. Copyright 2011 Ensimag. All rights reserved. 
+
+Definition in file \hyperlink{ei__widget_8h_source}{ei\_\-widget.h}.
+
+\subsection{Typedef Documentation}
+\hypertarget{ei__widget_8h_a3692fee0affca071917f22f2ec2018a4}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!ei\_\-callback\_\-t@{ei\_\-callback\_\-t}}
+\index{ei\_\-callback\_\-t@{ei\_\-callback\_\-t}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{ei\_\-callback\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf ei\_\-bool\_\-t}($\ast$ {\bf ei\_\-callback\_\-t})({\bf ei\_\-widget\_\-t} $\ast$widget, struct {\bf ei\_\-event\_\-t} $\ast$event, void $\ast$user\_\-param)}}
+\label{ei__widget_8h_a3692fee0affca071917f22f2ec2018a4}
+
+
+A function that is called in response to a user event. Usually passed as a parameter to \hyperlink{ei__event_8h_a184545ec337224781aa9bfc94117a910}{ei\_\-bind}. 
+\begin{DoxyParams}{Parameters}
+\item[{\em widget}]The widget for which the event was generated. \item[{\em event}]The event containing all its parameters (type, etc.) \item[{\em user\_\-param}]The user parameters that was provided by the caller when registering this callback.\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean telling if the event was consumed by the callback or not. If TRUE, the library does not try to call other callbacks for this event. If FALSE, the library will call the next callback registered for this event, if any. Note: The callback may execute many operations and still return FALSE, or return TRUE without having done anything. 
+\end{DoxyReturn}
+
+
+Definition at line 61 of file ei\_\-widget.h.
+
+\subsection{Function Documentation}
+\hypertarget{ei__widget_8h_a6aef3afd6aa8e6bab563735a0c54a76b}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!ei\_\-button\_\-configure@{ei\_\-button\_\-configure}}
+\index{ei\_\-button\_\-configure@{ei\_\-button\_\-configure}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{ei\_\-button\_\-configure}]{\setlength{\rightskip}{0pt plus 5cm}void ei\_\-button\_\-configure ({\bf ei\_\-widget\_\-t} $\ast$ {\em widget}, \/  {\bf ei\_\-size\_\-t} $\ast$ {\em requested\_\-size}, \/  const {\bf ei\_\-color\_\-t} $\ast$ {\em color}, \/  int $\ast$ {\em border\_\-width}, \/  int $\ast$ {\em corner\_\-radius}, \/  {\bf ei\_\-relief\_\-t} $\ast$ {\em relief}, \/  char $\ast$$\ast$ {\em text}, \/  {\bf ei\_\-font\_\-t} $\ast$ {\em text\_\-font}, \/  {\bf ei\_\-color\_\-t} $\ast$ {\em text\_\-color}, \/  {\bf ei\_\-anchor\_\-t} $\ast$ {\em text\_\-anchor}, \/  {\bf ei\_\-surface\_\-t} $\ast$ {\em img}, \/  {\bf ei\_\-rect\_\-t} $\ast$$\ast$ {\em img\_\-rect}, \/  {\bf ei\_\-anchor\_\-t} $\ast$ {\em img\_\-anchor}, \/  {\bf ei\_\-callback\_\-t} $\ast$ {\em callback}, \/  void $\ast$$\ast$ {\em user\_\-param})}}
+\label{ei__widget_8h_a6aef3afd6aa8e6bab563735a0c54a76b}
+
+
+Configures the attributes of widgets of the class \char`\"{}button\char`\"{}. 
+\begin{DoxyParams}{Parameters}
+\item[{\em widget,requested\_\-size,color,border\_\-width,relief,text,text\_\-font,text\_\-color,text\_\-anchor,img,img\_\-rect,img\_\-anchor}]See the parameter definition of \hyperlink{ei__widget_8h_aaaeb8447f509b20478940b514b542106}{ei\_\-frame\_\-configure}. The only difference is that relief defaults to \hyperlink{ei__types_8h_aa79a32b1d8ece0e44cfa394e870b270bac1e7867185743599ffcceb42784bd4e3}{ei\_\-relief\_\-raised} and border\_\-width defaults to \hyperlink{ei__widget_8h_a9d4970e13991bc2e49f47892c7e9429f}{k\_\-default\_\-button\_\-border\_\-width}. \item[{\em corner\_\-radius}]The radius (in pixels) of the rounded corners of the button. 0 means straight corners. Defaults to k\_\-default\_\-button\_\-corner\_\-radius. \item[{\em callback}]The callback function to call when the user clicks on the button. Defaults to NULL (no callback). \item[{\em user\_\-param}]A programmer supplied parameter that will be passed to the callback when called. Defaults to NULL. \end{DoxyParams}
+\hypertarget{ei__widget_8h_aaaeb8447f509b20478940b514b542106}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!ei\_\-frame\_\-configure@{ei\_\-frame\_\-configure}}
+\index{ei\_\-frame\_\-configure@{ei\_\-frame\_\-configure}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{ei\_\-frame\_\-configure}]{\setlength{\rightskip}{0pt plus 5cm}void ei\_\-frame\_\-configure ({\bf ei\_\-widget\_\-t} $\ast$ {\em widget}, \/  {\bf ei\_\-size\_\-t} $\ast$ {\em requested\_\-size}, \/  const {\bf ei\_\-color\_\-t} $\ast$ {\em color}, \/  int $\ast$ {\em border\_\-width}, \/  {\bf ei\_\-relief\_\-t} $\ast$ {\em relief}, \/  char $\ast$$\ast$ {\em text}, \/  {\bf ei\_\-font\_\-t} $\ast$ {\em text\_\-font}, \/  {\bf ei\_\-color\_\-t} $\ast$ {\em text\_\-color}, \/  {\bf ei\_\-anchor\_\-t} $\ast$ {\em text\_\-anchor}, \/  {\bf ei\_\-surface\_\-t} $\ast$ {\em img}, \/  {\bf ei\_\-rect\_\-t} $\ast$$\ast$ {\em img\_\-rect}, \/  {\bf ei\_\-anchor\_\-t} $\ast$ {\em img\_\-anchor})}}
+\label{ei__widget_8h_aaaeb8447f509b20478940b514b542106}
+
+
+Configures the attributes of widgets of the class \char`\"{}frame\char`\"{}. Parameters obey the \char`\"{}default\char`\"{} protocol: if a parameter is \char`\"{}NULL\char`\"{} and it has never been defined before, then a default value should be used (default values are specified for each parameter). If the parameter is \char`\"{}NULL\char`\"{} but was defined on a previous call, then its value must not be changed.
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em widget}]The widget to configure. \item[{\em requested\_\-size}]The size requested for this widget. The geometry manager may override this size due to other constraints. Defaults to the \char`\"{}natural size\char`\"{} of the widget, ie. big enough to display the text or the image, or (0, 0) if the widget has no text and no image. \item[{\em color}]The color of the background of the widget. Defaults to \hyperlink{ei__types_8h_a00dfca48550b7224f2d8011497b9fd8c}{ei\_\-default\_\-background\_\-color}. \item[{\em border\_\-width}]The width in pixel of the border decoration of the widget. The final appearance depends on the \char`\"{}relief\char`\"{} parameter. Defaults to 0. \item[{\em relief}]Appearance of the border of the widget. Defaults to \hyperlink{ei__types_8h_aa79a32b1d8ece0e44cfa394e870b270ba105222bc995071e84bce027c90a59b62}{ei\_\-relief\_\-none}. \item[{\em text}]The text to display in the widget, or NULL. Only one of the parameter \char`\"{}text\char`\"{} and \char`\"{}img\char`\"{} should be used (i.e. non-\/NULL). Defaults to NULL. \item[{\em text\_\-font}]The font used to display the text. Defaults to \hyperlink{ei__types_8h_a722bfa1a8a9a4202fb2d4abce2f06a8c}{ei\_\-default\_\-font}. \item[{\em text\_\-color}]The color used to display the text. Defaults to \hyperlink{ei__types_8h_adc5dd1241a145ff097f2c01dd6ab13af}{ei\_\-font\_\-default\_\-color}. \item[{\em text\_\-anchor}]The anchor of the text, i.e. where it is placed whithin the widget when the size of the widget is bigger than the size of the text. Defaults to \hyperlink{ei__types_8h_a3852c963af609d31d7cfcff79c4c8450a5704b2469014b3e93fbdb0b297ed92b0}{ei\_\-anc\_\-center}. \item[{\em img}]The image to display in the widget, or NULL. Any surface can be used, but usually a surface returned by \hyperlink{hw__interface_8h_a516f601afd0c045c9fb0af0f92ec82d4}{hw\_\-image\_\-load}. Only one of the parameter \char`\"{}text\char`\"{} and \char`\"{}img\char`\"{} should be used (i.e. non-\/NULL). Defaults to NULL. \item[{\em img\_\-rect}]If not NULL, this rectangle defines a subpart of \char`\"{}img\char`\"{} to use as the image displayed in the widget. Defaults to NULL. \item[{\em img\_\-anchor}]The anchor of the image, i.e. where it is placed whithin the widget when the size of the widget is bigger than the size of the image. Defaults to \hyperlink{ei__types_8h_a3852c963af609d31d7cfcff79c4c8450a5704b2469014b3e93fbdb0b297ed92b0}{ei\_\-anc\_\-center}. \end{DoxyParams}
+\hypertarget{ei__widget_8h_a853349fd4f65ae575a1989a9713059b4}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!ei\_\-toplevel\_\-configure@{ei\_\-toplevel\_\-configure}}
+\index{ei\_\-toplevel\_\-configure@{ei\_\-toplevel\_\-configure}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{ei\_\-toplevel\_\-configure}]{\setlength{\rightskip}{0pt plus 5cm}void ei\_\-toplevel\_\-configure ({\bf ei\_\-widget\_\-t} $\ast$ {\em widget}, \/  {\bf ei\_\-size\_\-t} $\ast$ {\em requested\_\-size}, \/  {\bf ei\_\-color\_\-t} $\ast$ {\em color}, \/  int $\ast$ {\em border\_\-width}, \/  char $\ast$$\ast$ {\em title}, \/  {\bf ei\_\-bool\_\-t} $\ast$ {\em closable}, \/  {\bf ei\_\-axis\_\-set\_\-t} $\ast$ {\em resizable}, \/  {\bf ei\_\-size\_\-t} $\ast$$\ast$ {\em min\_\-size})}}
+\label{ei__widget_8h_a853349fd4f65ae575a1989a9713059b4}
+
+
+Configures the attributes of widgets of the class \char`\"{}toplevel\char`\"{}. 
+\begin{DoxyParams}{Parameters}
+\item[{\em widget}]The widget to configure. \item[{\em requested\_\-size}]The content size requested for this widget, this does not include the decorations (border, title bar). The geometry manager may override this size due to other constraints. Defaults to (320x240). \item[{\em color}]The color of the background of the content of the widget. Defaults to \hyperlink{ei__types_8h_a00dfca48550b7224f2d8011497b9fd8c}{ei\_\-default\_\-background\_\-color}. \item[{\em border\_\-width}]The width in pixel of the border of the widget. Defaults to 4. \item[{\em title}]The string title diplayed in the title bar. Defaults to \char`\"{}Toplevel\char`\"{}. \item[{\em closable}]If true, the toplevel is closable by the user, the toplevel must show a close button in its title bar. Defaults to \hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28a26fdc833ef14f44fa15d81522b6802ec}{EI\_\-TRUE}. \item[{\em resizable}]Defines if the widget can be resized horizontally and/or vertically by the user. Defaults to \hyperlink{ei__types_8h_ab5d9ff46ba9b2c9fa6d6fbd2594c6439a6e6ffa2a8d854858429d6f54d94919a9}{ei\_\-axis\_\-both}. \item[{\em min\_\-size}]For resizable widgets, defines the minimum size. Defaults to (160, 120). \end{DoxyParams}
+\hypertarget{ei__widget_8h_a06da409592af870c9ab9c36f85147ce8}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!ei\_\-widget\_\-create@{ei\_\-widget\_\-create}}
+\index{ei\_\-widget\_\-create@{ei\_\-widget\_\-create}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{ei\_\-widget\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\_\-widget\_\-t}$\ast$ ei\_\-widget\_\-create ({\bf ei\_\-widgetclass\_\-name\_\-t} {\em class\_\-name}, \/  {\bf ei\_\-widget\_\-t} $\ast$ {\em parent})}}
+\label{ei__widget_8h_a06da409592af870c9ab9c36f85147ce8}
+
+
+Creates a new instance of a widget of some particular class, as a descendant of an existing widget. The widget is not displayed on screen until it is managed by a geometry manager. The widget should be released by calling \hyperlink{ei__widget_8h_a57aa6b5c33e92eb9728dc478f15b7de6}{ei\_\-widget\_\-destroy} when no more needed.
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em class\_\-name}]The name of the class of the widget that is to be created. \item[{\em parent}]A pointer to the parent widget. Can not be NULL.\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The newly created widget, or NULL if there was an error. 
+\end{DoxyReturn}
+\hypertarget{ei__widget_8h_a57aa6b5c33e92eb9728dc478f15b7de6}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!ei\_\-widget\_\-destroy@{ei\_\-widget\_\-destroy}}
+\index{ei\_\-widget\_\-destroy@{ei\_\-widget\_\-destroy}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{ei\_\-widget\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void ei\_\-widget\_\-destroy ({\bf ei\_\-widget\_\-t} $\ast$ {\em widget})}}
+\label{ei__widget_8h_a57aa6b5c33e92eb9728dc478f15b7de6}
+
+
+Destroys a widget. Removes it from screen if it is managed by a geometry manager. Destroys all its descendants. 
+\begin{DoxyParams}{Parameters}
+\item[{\em widget}]The widget that is to be destroyed. \end{DoxyParams}
+\hypertarget{ei__widget_8h_a3a91c65052c667a7a5eefef1606c099d}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!ei\_\-widget\_\-pick@{ei\_\-widget\_\-pick}}
+\index{ei\_\-widget\_\-pick@{ei\_\-widget\_\-pick}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{ei\_\-widget\_\-pick}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\_\-widget\_\-t}$\ast$ ei\_\-widget\_\-pick ({\bf ei\_\-point\_\-t} $\ast$ {\em where})}}
+\label{ei__widget_8h_a3a91c65052c667a7a5eefef1606c099d}
+
+
+Returns the widget that is at a given location on screen. 
+\begin{DoxyParams}{Parameters}
+\item[{\em where}]The location on screen, expressed in the root window coordinates.\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The top-\/most widget at this location, or NULL if there is no widget at this location (except for the root widget). 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\hypertarget{ei__widget_8h_a9d4970e13991bc2e49f47892c7e9429f}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!k\_\-default\_\-button\_\-border\_\-width@{k\_\-default\_\-button\_\-border\_\-width}}
+\index{k\_\-default\_\-button\_\-border\_\-width@{k\_\-default\_\-button\_\-border\_\-width}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{k\_\-default\_\-button\_\-border\_\-width}]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf k\_\-default\_\-button\_\-border\_\-width} = 4\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{ei__widget_8h_a9d4970e13991bc2e49f47892c7e9429f}
+
+
+The default border width of button widgets. 
+
+Definition at line 158 of file ei\_\-widget.h.\hypertarget{ei__widget_8h_aa204a20fcee599bf19f02f7813dac04d}{
+\index{ei\_\-widget.h@{ei\_\-widget.h}!k\_\-default\_\-button\_\-corner\_\-radius@{k\_\-default\_\-button\_\-corner\_\-radius}}
+\index{k\_\-default\_\-button\_\-corner\_\-radius@{k\_\-default\_\-button\_\-corner\_\-radius}!ei_widget.h@{ei\_\-widget.h}}
+\subsubsection[{k\_\-default\_\-button\_\-corner\_\-radius}]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf k\_\-default\_\-button\_\-corner\_\-radius} = 10\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{ei__widget_8h_aa204a20fcee599bf19f02f7813dac04d}
+
+
+The default corner radius of button widgets. 
+
+Definition at line 159 of file ei\_\-widget.h.
