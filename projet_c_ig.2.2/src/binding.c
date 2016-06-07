@@ -217,23 +217,23 @@ ei_bool_t touche_enfoncee (ei_widget_t *widget, struct ei_event_t *event, void *
 {
         
         
-	if (key->sym == "escape" ) {
-		ei_bind (ei_ev_keyup, NULL, "top_level", tout_fermer , NULL);
-		return EI_FALSE ;
-	} else if (est_modifier(key->sym)){ // il faut probablement utiliser ei_has_modifier (ei_event.h)
-		ei_bind (ei_ev_keydown,NULL,"top_level", touche_enfoncee_apres_modifier,NULL);
-		key->modifier_mask=key->sym;
-		ei_bind (ei_ev_keyup,NULL, "top_level", stop_modifier, NULL);
-		return EI_FALSE
-	} else {
-		ei_bind (ei_ev_key_up,NULL, "top_level", touche_relevee, NULL);
-		return EI_TRUE ; 
-	}       
+	/* if (key->key_sym == "escape" ) { */
+	/* 	ei_bind (ei_ev_keyup, NULL, "top_level", tout_fermer , NULL); */
+	/* 	return EI_FALSE ; */
+	/* } else if (est_modifier(key->key_sym)){ // il faut probablement utiliser ei_has_modifier (ei_event.h) */
+	/* 	ei_bind (ei_ev_keydown,NULL,"top_level", touche_enfoncee_apres_modifier,NULL); */
+	/* 	key->modifier_mask=key->sym; */
+	/* 	ei_bind (ei_ev_keyup,NULL, "top_level", stop_modifier, NULL); */
+	/* 	return EI_FALSE */
+	/* } else { */
+	/* 	ei_bind (ei_ev_key_up,NULL, "top_level", touche_relevee, NULL); */
+	/* 	return EI_TRUE ;  */
+	/* }      */  
 }
 
 ei_bool_t touche_relevee (ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
-	ei_unbind (ei_ev_key_up,NULL, "top_level", touche_relevee, NULL);
+	ei_unbind (ei_ev_keyup,NULL, "top_level", touche_relevee, NULL);
 	return EI_TRUE;
 }
 
